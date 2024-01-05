@@ -1,5 +1,15 @@
+require('dotenv').config();
 const createError = require('http-errors');
 const express = require('express');
+const mongoose = require('mongoose');
+mongoose.set("strictQuery", false);
+
+main().catch((err) => console.log(errr));
+async function main(){
+  await mongoose.connect(process.env.mongoDB);
+  console.log("Connected to Database");
+}
+
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
