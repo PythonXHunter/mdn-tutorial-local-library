@@ -2,6 +2,7 @@ const Book = require('../models/book');
 const Author = require('../models/author');
 const Genre = require('../models/genre');
 const BookInstance = require('../models/bookinstance');
+const { body, validationResult } = require("express-validator");
 
 const asyncHandler = require('express-async-handler');
 
@@ -75,8 +76,7 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
   });
 });
 
-
-exports.book_create_post = // Handle book create on POST.
+// Handle book create on POST.
 exports.book_create_post = [
   // Convert the genre to an array.
   (req, res, next) => {
@@ -146,6 +146,7 @@ exports.book_create_post = [
     }
   }),
 ];
+
 
 
 exports.book_delete_get = asyncHandler(async (req, res, next) => {
