@@ -7,7 +7,6 @@ exports.bookinstance_list = asyncHandler(async (req, res, next) => {
 	const allBookInstances = await BookInstance.find()
 		.populate("books")
 		.exec();
-		
 	res.render("bookinstance_list", {
 		title: "Book Instance List",
 		bookinstance_list: allBookInstances,

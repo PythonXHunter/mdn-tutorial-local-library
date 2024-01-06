@@ -147,8 +147,6 @@ exports.book_create_post = [
   }),
 ];
 
-
-
 exports.book_delete_get = asyncHandler(async (req, res, next) => {
 	res.send("NOT IMPLEMENTED: Book delete GET");
 })
