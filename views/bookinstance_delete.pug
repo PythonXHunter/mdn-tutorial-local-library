@@ -1,0 +1,11 @@
+extends layout
+
+block content
+
+  h1=title
+
+  p #[strong Do you really want to delete this BookInstance.]
+  form(method="post")
+    div.form-group
+      input#id.form-control(type="hidden" name="id" value=bookinstance._id)
+    button.btn.btn-primary(type="submit") Delete

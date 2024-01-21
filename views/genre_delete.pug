@@ -5,12 +5,13 @@ block content
   h1 #{title}: #{genre.name}
   if genre_books.length
     p #[strong Delete the following books before attempting to delete this genre.]
-    h4 Books
-    dl
-      each genre in genre_books
-        dt
-          a(href=genre.url) #{genre.title}
-        dd #{genre.summary}
+    div(style="margin-left: 20px; margin-top: 20px")
+      h4 Books
+      dl
+        each genre in genre_books
+          dt
+            a(href=genre.url) #{genre.title}
+          dd #{genre.summary}
   
   else
     p Do you really want to delete this Genre?

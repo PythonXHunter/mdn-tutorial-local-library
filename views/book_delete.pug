@@ -1,0 +1,30 @@
+extends layout
+
+block content
+
+  h1 #{title}: #{book.title}
+  if books_instance.length
+    p #[strong Delete the following copies before attempting to delete the Book.]
+    div(style="margin-left: 20px; margin-right: 20px")
+      h4 Copies
+        hr
+        dl
+          each instance in books_instance
+            dt
+              if instance.status=="Available"
+                p.text-success #{instance.status}
+              else if instance.status=="Maintenance"
+                p.text-danger #{instance.status}
+              else
+                p.text-warning #{instance.status}
+            dd Imprint: 
+              span #{instance.imprint}
+              if instance.status!="Available"
+                p Due: #{instance.due_back_formatted}        
+  
+  else
+    h6 Do you really want to delete this book?
+    form(method="post")
+      div.form-group
+        input#book_id.form-control(type="hidden" name="book_id" value=book._id)
+      button.btn.btn-primary(type="submit") Delete
