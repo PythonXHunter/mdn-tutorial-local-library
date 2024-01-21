@@ -108,9 +108,66 @@ exports.bookinstance_delete_post = asyncHandler(async (req, res, next) => {
 })
 
 exports.bookinstance_update_get = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: BookInstance update GET");
+	const [bookinstance, allBooks] = await Promise.all([
+    BookInstance.findById(req.params.id).populate("book").exec(),
+    Book.find({}, "title").sort({ title: 1 }).exec(),
+  ]);
+  if(bookinstance === null){
+    const err = new Error("BookInstance not found");
+    err.status = 400;
+    return next(err);
+  }
+  res.render("bookinstance_form", {
+    title: "Update BookInstance",
+    book_list: allBooks,
+    selected_book: bookinstance.book._id,
+    bookinstance: bookinstance,
+  });
 })
 
-exports.bookinstance_update_post = asyncHandler(async (req, res, next) => {
-	res.send("NOT IMPLEMENTED: BookInstance update POST");
-})
+exports.bookinstance_update_post = [
+  body("book", "Book name must be specified")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("imprint", "Imprint must be at least 3 character")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body("status", "Status must be specified")
+    .trim()
+    .isLength({ min: 3 })
+    .escape(),
+  body("due_back", "Invalid Date")
+    .optional({ values: "falsy" })
+    .isISO8601()
+    .toDate(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const bookinstance = BookInstance({
+      book: req.body.book,
+      imprint: req.body.imprint,
+      status: req.body.status,
+      due_back: req.body.due_back,
+      _id: req.params.id,
+    });
+
+    if(!errors.isEmpty()){
+      const allBooks = await Book.find({}, "title").sort({ title: 1 }).exec();
+
+      res.render("bookinstance_form", {
+        title: "Update BookInstance",
+        bookinstance: bookinstance,
+        selected_book: bookinstance.book._id,
+        book_list: allBooks,
+        errors: errors.array(),
+      });
+      return;
+    } else {
+      const updatedInstance = await BookInstance.findByIdAndUpdate(req.params.id, bookinstance);
+      res.redirect(updatedInstance.url);
+    }
+  }),
+];

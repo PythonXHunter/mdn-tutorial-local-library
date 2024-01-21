@@ -206,7 +206,8 @@ exports.book_update_get = asyncHandler(async (req, res, next) => {
   allGenres.forEach((genre) => {
     if (book.genre.includes(genre._id)) genre.checked = "true";
   });
-
+  // console.log(allGenres.map((genre) => genre['$__']));
+  // res.json({ book, allAuthors, allGenres });
   res.render("book_form", {
     title: "Update Book",
     authors: allAuthors,
