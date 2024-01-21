@@ -5,8 +5,9 @@ const { body, validationResult } = require('express-validator');
 
 exports.bookinstance_list = asyncHandler(async (req, res, next) => {
 	const allBookInstances = await BookInstance.find()
-		.populate("books")
+		.populate("book")
 		.exec();
+  // res.json({ allBookInstances });
 	res.render("bookinstance_list", {
 		title: "Book Instance List",
 		bookinstance_list: allBookInstances,
@@ -44,9 +45,9 @@ exports.bookinstance_create_get = asyncHandler(async (req, res, next) => {
 exports.bookinstance_create_post = [
   // Validate and sanitize fields.
   body("book", "Book must be specified").trim().isLength({ min: 1 }).escape(),
-  body("imprint", "Imprint must be specified")
+  body("imprint", "Imprint must be at least 3 characters")
     .trim()
-    .isLength({ min: 1 })
+    .isLength({ min: 3 })
     .escape(),
   body("status").escape(),
   body("due_back", "Invalid date")
